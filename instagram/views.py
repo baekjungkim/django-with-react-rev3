@@ -1,3 +1,4 @@
+from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet
 from .serializers import PostSerializer
 from .models import Post
@@ -24,3 +25,7 @@ class PostViewSet(ModelViewSet):
     #     print("request.POST :", request.POST)
     #     return super().dispatch(request, *args, **kwargs)
 
+
+class PublicPostListAPIView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()  # filter(is_public=True)
+    serializer_class = PostSerializer
