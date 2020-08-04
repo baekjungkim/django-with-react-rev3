@@ -1,5 +1,10 @@
 from rest_framework import generics
-from rest_framework.decorators import action, api_view, renderer_classes
+from rest_framework.decorators import (
+    action,
+    api_view,
+    authentication_classes,
+    renderer_classes,
+)
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -34,6 +39,13 @@ from .serializers import PostSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    # authentication_classes=[]
+
+    def perform_create(self, serializer):
+        # FIXME: 인증이 되어있다는 가정하애, author를 지정.
+        author = self.request.user  # User or AnonymousUser
+        ip = self.request.META["REMOTE_ADDR"]
+        serializer.save(ip=ip, author=author)
 
     @action(detail=False, methods=["GET"])
     def public(self, request):
