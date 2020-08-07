@@ -5,6 +5,7 @@ from rest_framework.decorators import (
     authentication_classes,
     renderer_classes,
 )
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -13,8 +14,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Post
-from .serializers import PostSerializer
 from .permissions import IsAuthorOrReadonly
+from .serializers import PostSerializer
 
 # class PublicPostListAPIView(generics.ListAPIView):
 #     queryset = Post.objects.filter(is_public=True)
@@ -52,6 +53,18 @@ class PostViewSet(ModelViewSet):
     ]
 
     # authentication_classes = []  # 인증이 되어있음을 보장받을 수 있음.
+
+    filter_backends = [SearchFilter, OrderingFilter]
+    # ?search= : QuerySet 조건 절에 추가할 필드 지정. 모델 필드 중에 문자열 필드만을 지정
+    # "^" : Starts-with search 시작하는 패턴에 대해서만
+    # "=" : Exact matches 정확하게 일치
+    # "@" : Full-text search (2020년 2월 Django Mysql 백엔드만 지원) 모든 문자열 일치
+    # "$" : Regex search 정규표현식 서치
+    search_fields = ["=message"]
+    # ?ordering= : 정렬을 허용할 필드의 화이트리스트. 미지정 시 serializer_class에 지정된 필드들.
+    ordering_fileds = ["id"]
+    # 디폴트 정렬 지정
+    ordering = ["id"]
 
     def perform_create(self, serializer):
         # FIXME: 인증이 되어있다는 가정하애, author를 지정.
