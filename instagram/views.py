@@ -6,6 +6,7 @@ from rest_framework.decorators import (
     renderer_classes,
 )
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,6 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .models import Post
 from .serializers import PostSerializer
+from .permissions import IsAuthorOrReadonly
 
 # class PublicPostListAPIView(generics.ListAPIView):
 #     queryset = Post.objects.filter(is_public=True)
@@ -39,7 +41,17 @@ from .serializers import PostSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # authentication_classes=[]
+
+    # DRF Permission
+    # IsAuthenticated : 인증된 요청에 한해서, 뷰 호출 허용
+    # IsAdminUser : Staff 인증 요청에 한해서, 뷰 호출 허용
+    # IsAuthenticatedOrReadOnly : 비 인증 요청에는 읽기 권한만 허용
+    # AllowAny(디폴트): 인증 여부에 상관없이, 뷰 호출 허용
+    permission_classes = [
+        IsAuthorOrReadonly  # Customizing permission Class : 해당 Post의 Author 만 수정가능.
+    ]
+
+    # authentication_classes = []  # 인증이 되어있음을 보장받을 수 있음.
 
     def perform_create(self, serializer):
         # FIXME: 인증이 되어있다는 가정하애, author를 지정.
