@@ -60,7 +60,7 @@ class PostViewSet(ModelViewSet):
     # "=" : Exact matches 정확하게 일치
     # "@" : Full-text search (2020년 2월 Django Mysql 백엔드만 지원) 모든 문자열 일치
     # "$" : Regex search 정규표현식 서치
-    search_fields = ["=message"]
+    search_fields = ["^message"]
     # ?ordering= : 정렬을 허용할 필드의 화이트리스트. 미지정 시 serializer_class에 지정된 필드들.
     ordering_fileds = ["id"]
     # 디폴트 정렬 지정
