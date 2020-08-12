@@ -117,9 +117,15 @@ STATIC_URL = "/static/"
 
 # Django Rest Framework Default Permission Setting
 REST_FRAMEWORK = {
-    "PAGE_SIZE": 2,
+    "PAGE_SIZE": 2,  # 페이지당 2개
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
+    # api 요청 횟수 제한
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle",],
+    "DEFAULT_THROTTLE_RATES": {
+        # 'anon' : None,
+        "user": "3/day",  # 하루에 3번
+    },
 }
