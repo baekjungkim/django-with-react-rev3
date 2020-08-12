@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
+    "accounts",
     "instagram",
 ]
 
@@ -115,17 +117,23 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-# Django Rest Framework Default Permission Setting
+# Django Rest Framework Setting
 REST_FRAMEWORK = {
+    # 인증
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",  # 세션 인증
+        # 'rest_framework.authentication.BasicAuthentication' # 베이직 인증(username, pw 항시 필요)
+        "rest_framework.authentication.TokenAuthentication",  # 토큰 인증
+    ],
     "PAGE_SIZE": 2,  # 페이지당 2개
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     # api 요청 횟수 제한
-    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle",],
-    "DEFAULT_THROTTLE_RATES": {
-        # 'anon' : None,
-        "user": "3/day",  # 하루에 3번
-    },
+    # "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle",],
+    # "DEFAULT_THROTTLE_RATES": {
+    # 'anon' : None,
+    # "user": "3/day",  # 하루에 3번
+    # },
 }
