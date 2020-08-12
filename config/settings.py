@@ -123,12 +123,14 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",  # 세션 인증
         # 'rest_framework.authentication.BasicAuthentication' # 베이직 인증(username, pw 항시 필요)
-        "rest_framework.authentication.TokenAuthentication",  # 토큰 인증
+        # "rest_framework.authentication.TokenAuthentication",  # 토큰 인증
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # JWT 토큰 인증
     ],
     "PAGE_SIZE": 2,  # 페이지당 2개
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        # 'rest_framework.permissions.IsAuthenticated',
     ],
     # api 요청 횟수 제한
     # "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle",],
@@ -137,3 +139,8 @@ REST_FRAMEWORK = {
     # "user": "3/day",  # 하루에 3번
     # },
 }
+
+JWT_AUTH = {
+    "JWT_ALLOW_REFRESH": True,
+}
+
